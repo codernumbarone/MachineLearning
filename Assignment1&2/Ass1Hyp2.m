@@ -20,6 +20,8 @@ for w=2:n
 end
 
 Y=T{:,3}/mean(T{:,3});
+y=length(Y);
+
 Theta=zeros(n,1);
 k=1;
 
@@ -39,3 +41,12 @@ if q <.001;
     R=0;
 end
 end
+
+%Normal Equation
+Z = [ones(y, 1) U];
+th = zeros(size(Z, 3), 1);
+th = pinv((Z'*Z))*Z'*Y;
+
+fprintf('Theta computed from the normal equations: \n');
+fprintf(' %f \n', th);
+fprintf('\n');

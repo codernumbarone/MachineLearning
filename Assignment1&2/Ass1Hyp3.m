@@ -50,6 +50,7 @@ for i = 1:test_num
     y_test(i) = Y(num_array(i+trainset_num+cross_num));
 end
 
+y=length(y_train);
 Theta=zeros(size(trainset,2),1);
 m=length(trainset);
 
@@ -87,4 +88,14 @@ if qq <.01;
     R=0;
 end
 end
+
+%Normal Equation
+Z = [ones(y, 1) trainset];
+th = zeros(size(Z, 3), 1);
+th = pinv((Z'*Z))*Z'*y_train;
+
+fprintf('Theta computed from the normal equations: \n');
+fprintf(' %f \n', th);
+fprintf('\n');
+
 

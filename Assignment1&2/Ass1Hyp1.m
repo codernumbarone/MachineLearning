@@ -13,6 +13,8 @@ U=T{:,4:19};
 
 U1=T{:,20:21};
 U2=U.^2;
+
+AllU=[U U1];
 X=[ones(m,1) U U1 U2];
 
 n=length(X(1,:));
@@ -23,6 +25,7 @@ for w=2:n
 end
 
 Y=T{:,3}/mean(T{:,3});
+y=length(Y);
 Theta=zeros(n,1);
 k=1;
 
@@ -42,3 +45,14 @@ if q <.001;
     R=0;
 end
 end
+
+
+%Normal Equation
+Z = [ones(y, 1) AllU];
+th = zeros(size(Z, 3), 1);
+th = pinv((Z'*Z))*Z'*Y;
+
+fprintf('Theta computed from the normal equations: \n');
+fprintf(' %f \n', th);
+fprintf('\n');
+
