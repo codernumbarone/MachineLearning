@@ -42,7 +42,7 @@ J = (-y'*log(h) - (1-y)'*log(1-h))/m + (lambda/(2*m)*sum(theta(2:length(theta)).
 temp=theta;
 temp(1)=0;
 
-grad = (X'*(h-y))/m + (lambda/m)*theta;
+grad = (X'*(h-y))/m + (lambda/m)*temp;
 
 
 
