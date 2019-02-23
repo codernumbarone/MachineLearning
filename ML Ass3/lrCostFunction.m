@@ -39,8 +39,10 @@ grad = zeros(size(theta));
 %regularization
 h = sigmoid(X*theta);
 J = (-y'*log(h) - (1-y)'*log(1-h))/m + (lambda/(2*m)*sum(theta(2:length(theta)).^2));
-grad = (X'*(h-y))/m + (lambda*theta)/m;
-grad(1) =grad(1)- (lambda*theta(1))/m;
+temp=theta;
+temp(1)=0;
+
+grad = (X'*(h-y))/m + (lambda/m)*theta;
 
 
 

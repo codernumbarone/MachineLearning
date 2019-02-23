@@ -24,7 +24,7 @@ x1 = [ones(m, 1) X];
 h= sigmoid(x1*Theta1');
 x2 = [ones(m, 1) h];
 h2 = sigmoid(x2*Theta2');
-[index,p] = max(h2, [], 2);
+[~,p] = max(h2, [], 2);
 
 
 
