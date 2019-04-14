@@ -69,6 +69,7 @@ for i=1:K
     centroids(i, :) = mean(x(indexes, :));
   end
 end
+
 %Kmean on reduced
 centroids1 = zeros(k, size(R, 2));
 randdis1 = randperm(size(R, 1));
@@ -95,66 +96,19 @@ end
 
 %anomly detection
 mu = zeros(n, 1);
-Sigma = zeros(n, 1);
+sigma = zeros(n, 1);
 %get gaussian parameters
 mu = mean(x)';
 sigma = var(x, 1)';
 %PDF
-kk = length(mu);
-if (size(Sigma, 2) == 1) || (size(Sigma, 1) == 1)
-    Sigma = diag(Sigma);
+an=1;
+for i=1:18
+  PDF=normcdf(x(8,i),mu(i),sigma(i));
+  an=an*PDF;
 end
-
-% pdf = (2*pi)^(-kk/2)*det(Sigma) ^ (-0.5)*exp(-0.5) *(x-mu)'*Sigma^-1*(x-u);
-
-X = bsxfun(@minus, x, mu(:)');
-p = (2 * pi) ^ (- kk / 2) * det(Sigma) ^ (-0.5) * ...
-    exp(-0.5 * sum(bsxfun(@times, X * pinv(Sigma), X), 2));
-
-num_array = randperm(m,m);
-
-cross_num =     (m * 0.2); 
-cross     = zeros(round(cross_num),n);
-y_cross = zeros(round(cross_num),1);
-
-for i = 1:cross_num
-    cross(i,:) = X(num_array(i),:);
-    y_cross(i) = Y(num_array(i));
+if(an>=0.999||an<=0.009)
+    fprintf('Anomaly');
 end
-
-
-%PDF XVAL
-% pdf = (2*pi)^(-kk/2)*det(Sigma) ^ (-0.5)*exp(-0.5) *(x-mu)'*Sigma^-1*(x-u);
-
-XCross = bsxfun(@minus, cross, mu(:)');
-pp = (2 * pi) ^ (- kk / 2) * det(Sigma) ^ (-0.5) * ...
-    exp(-0.5 * sum(bsxfun(@times, XCross * pinv(Sigma), XCross), 2));
-
-
-
-Threshold = 0;
-an = 0;
-anom = 0;
-
-stepsize = (max(p) - min(p)) / 1000;
-for epsilon = min(p):stepsize:max(p)
-        Prediction = (p < epsilon);
-    
-    tp = sum((Y==1) & (Prediction==1));
-    fp = sum((Y==0) & (Prediction==1));
-    fn = sum((Y==1) & (Prediction==0));
-    
-    prec = tp / (tp+fp);
-    rec = tp / (tp+fn);
-    
-    anom = (2*prec*rec) / (prec+rec);
-    
-    if anom > an
-       an = anom;
-       Threshold = epsilon;
-    end
-end
-anomily = find(p < epsilon);
 
 
 
